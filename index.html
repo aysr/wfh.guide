@@ -135,12 +135,12 @@
 </head>
 <body>
     <script>
-        var parsed_data = {}, contenthtml = "";;
+       var parsed_data = {}, contenthtml = "";;
 jQuery.ajax({
 url: "https://csv-to-json.herokuapp.com/?csv=https://docs.google.com/spreadsheets/d/1-K3OvM4xoXHz95jyl_pscnMgXNesgx2t6-9nXlYkfN0/pub?output=csv",
 success: function(data){
   jQuery.each(data, function(i, ele){
-  contenthtml += "<div class=\"card\"><div class=\"card__img\"><img src=\"https://placekitten.com/200/100\"/></div><h3 class=\"card__title\">" + 
+  contenthtml += "<div class=\"card\"><div class=\"card__img\"><img src=\"" + ele.LogoLink + "\"/></div><h3 class=\"card__title\">" + 
   ele.Title + 
   "</h3><p class=\"card__description\">" + 
   ele.Description + 
@@ -152,6 +152,7 @@ success: function(data){
   jQuery('body').append(contenthtml);
 }
 });
+
     </script>
   </body>
 </html>
