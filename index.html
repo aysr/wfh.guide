@@ -177,7 +177,7 @@
   </footer>
 
   <script>
-    var parsed_data = {}, contenthtml = "";;
+    var parsed_data = {}, contenthtml = "";
     jQuery.ajax({
     url: "https://csv-to-json.herokuapp.com/?csv=https://docs.google.com/spreadsheets/d/1-K3OvM4xoXHz95jyl_pscnMgXNesgx2t6-9nXlYkfN0/pub?output=csv",
     success: function(data){
@@ -186,9 +186,9 @@
       ele.Title + 
       "</h3><p class=\"card__description\">" + 
       ele.Description + 
-      "</p><div class=\"card__button button--orange\"><a target=\"_blank\" href=\"" + 
+      "</p><a target=\"_blank\" href=\"" + 
       ele.Link + 
-      "\">Read guide</a></div></div>";
+      "\"><div class=\"card__button button--orange\">Read guide</div></a></div>";
       });
       jQuery('.card').remove();
       jQuery('#content').append(contenthtml);
