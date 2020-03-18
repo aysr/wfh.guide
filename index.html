@@ -237,8 +237,9 @@
 
         //-- Adding search index
         idx = lunr(function () {
-          this.ref('Id')
+          this.use(normaliseSpelling)
 
+          this.ref('Id')
           this.field('Title')
           this.field('Description')
           Object.values(parsed_data).forEach(function (doc) {
@@ -261,6 +262,27 @@
     function renderCards(contenthtml) {
       jQuery('.card').remove();
       jQuery('#content').append(contenthtml);
+    }
+
+    var normaliseSpelling = function (builder) {
+
+      // Define a pipeline function that remove 's
+      var pipelineFunction = function (token) {
+        var tokenStr = token.toString()
+        if (tokenStr.endsWith("'s")) {
+          return token.update(function () { return tokenStr.slice(0, tokenStr.length-2) })
+        } else {
+          return token
+        }
+      }
+
+      // Register the pipeline function so the index can be serialised
+      lunr.Pipeline.registerFunction(pipelineFunction, 'normaliseSpelling')
+
+      // Add the pipeline function to both the indexing pipeline and the
+      // searching pipeline
+      builder.pipeline.before(lunr.stemmer, pipelineFunction)
+      builder.searchPipeline.before(lunr.stemmer, pipelineFunction)
     }
 
     //-- Delay for keyup
