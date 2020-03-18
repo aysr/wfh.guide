@@ -91,6 +91,36 @@
         backface-visibility: hidden;
         transition: all 0.3s;
       }
+      .search-grid {
+        padding-bottom: 10px;
+        text-align: center;
+        width: 100%;
+        /* max-width: 1140px; */
+        /* min-width: 748px; */
+        margin: 50px 0px;
+        overflow: hidden;
+      }
+      .search-grid .searchbox {
+        padding: 0 12%;
+        width: 100%;
+        float: left;
+        /*min-height: 1px;*/
+        /*padding-right: 20px;*/
+      }
+      .search-grid input[type="text"] {
+        width: 50%;
+        padding: 0px 20px;
+        line-height: 40px;
+        border-radius: 20px;
+        background-color: #FAFAFA;
+        border: 1px solid #AF3F3E;
+        outline: none;
+        color: #4a4a4a;
+        font-size: 1rem;
+      }
+
+      /* Keep media CSS below to override for devices */
+      /* ============================================ */
       @media screen and (max-width: 768px) {
         .card__button {
           min-width: 170px;
@@ -98,9 +128,12 @@
         }
       }
       @media screen and (max-width: 576px) {
+        .search-grid input[type="text"] {
+          width: 100%;
+        }
         .card__button {
           min-width: inherit;
-          margin: 0;
+          margin: 10px;
           margin-bottom: 16px;
           width: 100%;
           max-width: 300px;
@@ -149,17 +182,6 @@
       .text-center {
         text-align: center;
       }
-      .search input[type="text"] {
-        width: 50%;
-        padding: 0px 20px;
-        line-height: 40px;
-        border-radius: 20px;
-        background-color: #FAFAFA;
-        border: 1px solid #AF3F3E;
-        outline: none;
-        color: #4a4a4a;
-        font-size: 1rem;
-      }
     </style>
     
     <meta name="description" content="You'll find the best of the internet's wisdom to make your attempt at working from home successful as we weather the Covid-19 storm, "/>
@@ -180,9 +202,11 @@
     <h4>
       Something we should add? Tweet to us at <a target="_blank" href="https://twitter.com/wfh_guide"> @wfh_guide </a>
     </h4>
+  </div>
 
-    <!-- Search Bar -->
-    <div class='search' style='margin: 50px'>
+  <!-- Search Bar -->
+  <div class='search-grid'>
+    <div class='searchbox'>
       <input type="text" id="searchbar" placeholder="Search for wfh, slack, +postman, etc."/>
     </div>
   </div>
