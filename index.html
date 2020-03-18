@@ -146,12 +146,23 @@
       header {
         margin-bottom: 70px;
       }
-
+      .search input[type="text"] {
+        width: 50%;
+        padding: 0px 20px;
+        line-height: 40px;
+        border-radius: 20px;
+        background-color: #FAFAFA;
+        border: 1px solid #AF3F3E;
+        outline: none;
+        color: #4a4a4a;
+        font-size: 1rem;
+      }
     </style>
     
     <meta name="description" content="You'll find the best of the internet's wisdom to make your attempt at working from home successful as we weather the Covid-19 storm, "/>
     <meta name="title" content="The best of the internet about working from home." />
     <meta name="google-site-verification" content="Z9BAIb9TB968b-KIBim8TFIR7fmsjcZriGROfipAtac" />
+    <script src="https://unpkg.com/lunr/lunr.js"></script>
 </head>
 <body>
 
@@ -165,6 +176,13 @@
     <h4>
       Something we should add? Tweet to us at <a target="_blank" href="https://twitter.com/wfh_guide"> @wfh_guide </a>
     </h4>
+
+    <!-- Search Bar -->
+    <div class='search' style='margin: 50px'>
+      <input type="text" id="searchbar" placeholder="Slack, +postman wfh, etc."/>
+    </div>
+
+    
   </header>
 
   <div id='content'>
@@ -178,23 +196,83 @@
   </footer>
 
   <script>
-    var parsed_data = {}, contenthtml = "";
+    var parsed_data = {}, contenthtml = "", idx=null;
     jQuery.ajax({
-    url: "https://csv-to-json.herokuapp.com/?csv=https://docs.google.com/spreadsheets/d/1-K3OvM4xoXHz95jyl_pscnMgXNesgx2t6-9nXlYkfN0/pub?output=csv",
-    success: function(data){
-      jQuery.each(data, function(i, ele){
-      contenthtml += "<div class=\"card\"><div class=\"card__img\"><img src=\"" + ele.LogoLink + "\"/></div><h3 class=\"card__title\">" + 
-      ele.Title + 
-      "</h3><p class=\"card__description\">" + 
-      ele.Description + 
-      "</p><a target=\"_blank\" href=\"" + 
-      ele.Link + 
-      "\"><div class=\"card__button button--orange\">Read guide</div></a></div>";
-      });
+      url: "https://csv-to-json.herokuapp.com/?csv=https://docs.google.com/spreadsheets/d/1-K3OvM4xoXHz95jyl_pscnMgXNesgx2t6-9nXlYkfN0/pub?output=csv",
+      success: function(data){
+        
+        //-- Construct cards and rendering them
+        jQuery.each(data, function(i, ele){
+          parsed_data[i] = ele;
+          parsed_data[i]['Id'] = i;
+          contenthtml += constructCard(ele);
+        });
+        renderCards(contenthtml)
+
+        //-- Adding search index
+        idx = lunr(function () {
+          this.ref('Id')
+
+          this.field('Title')
+          this.field('Description')
+          Object.values(parsed_data).forEach(function (doc) {
+            this.add(doc)
+          }, this)
+        });
+      }
+    });
+
+    function constructCard(ele) {
+      return "<div class=\"card\"><div class=\"card__img\"><img src=\"" + ele.LogoLink + "\"/></div><h3 class=\"card__title\">" + 
+          ele.Title + 
+          "</h3><p class=\"card__description\">" + 
+          ele.Description + 
+          "</p><a target=\"_blank\" href=\"" + 
+          ele.Link + 
+          "\"><div class=\"card__button button--orange\">Read guide</div></a></div>";
+    }
+
+    function renderCards(contenthtml) {
       jQuery('.card').remove();
       jQuery('#content').append(contenthtml);
     }
-    });
+
+    //-- Delay for keyup
+    function delay(callback, ms) {
+      var timer = 0;
+      return function() {
+        var context = this, args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          callback.apply(context, args);
+        }, ms || 0);
+      };
+    }
+
+    jQuery(document).ready(function(){
+
+      //-- Search on keyup
+      jQuery('#searchbar').keyup(delay(function(ev){
+        var searchterm = jQuery(this).val();
+        if(searchterm != "") {
+          matches = idx.search(searchterm);
+
+          var chtml = "";
+          matches.forEach(function(doc) {
+            chtml += constructCard(parsed_data[doc.ref]);
+          });
+          // console.log(chtml);
+          renderCards(chtml);
+        } else {
+          var chtml = "";
+          Object.values(parsed_data).forEach(function(doc) {
+            chtml += constructCard(doc);
+          });
+          // console.log(chtml);
+          renderCards(chtml);
+        }
+      }, 500));
+    })
   </script>
 </body>
 </html>
