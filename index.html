@@ -179,7 +179,7 @@
 
     <!-- Search Bar -->
     <div class='search' style='margin: 50px'>
-      <input type="text" id="searchbar" placeholder="Eg:'Slack...wfh + postman...work from home + guides etc.'"/>
+      <input type="text" id="searchbar" placeholder="Search for wfh, slack, +postman, etc."/>
     </div>
 
     
@@ -229,7 +229,7 @@
           ele.Description + 
           "</p><a target=\"_blank\" href=\"" + 
           ele.Link + 
-          "\"><div class=\"card__button button--orange\">Read guide</div></a></div>";
+          "\"><div class=\"card__button button--orange\">Read " + ele.Type + "</div></a></div>";
     }
 
     function renderCards(contenthtml) {
