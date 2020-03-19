@@ -257,6 +257,7 @@
     <meta name="title" content="The best of the internet about working from home." />
     <meta name="google-site-verification" content="Z9BAIb9TB968b-KIBim8TFIR7fmsjcZriGROfipAtac" />
     <script src="https://unpkg.com/lunr/lunr.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56842257-2"></script>
 </head>
 
 <body>
@@ -315,6 +316,10 @@
             this.add(doc)
           }, this)
         });
+
+        //-- Scroll to Element if required
+        var elementID = '#' + window.location.href.split('#')[1];
+        jQuery(elementID)[0].scrollIntoView({ behavior: 'smooth' });
       }
     });
 
@@ -375,7 +380,7 @@
       event.stopPropagation();
 
       var el = document.createElement('textarea');
-      el.value = window.location.href + '#' + permaId;
+      el.value = window.location.href.split('#')[0] + '#' + permaId;
       document.body.appendChild(el);
       el.select();
       document.execCommand('copy');
@@ -409,6 +414,12 @@
         }
       }, 500));
     });
+
+    //-- Google analytics
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-56842257-2');
   </script>
 </body>
 </html>
